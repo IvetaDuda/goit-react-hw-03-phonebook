@@ -22,7 +22,7 @@ class ContactForm extends Component {
   hendelSubmit = event => {
     event.preventDefault();
     const addContact = {
-      id: nanoid(12),
+      id: nanoid(4),
       name: this.state.name,
       number: this.state.number,
     };

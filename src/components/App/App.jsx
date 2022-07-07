@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import ContactForm from '../ContactForm';
 import ContactList from '../ContactList';
 import Filter from '../Filter';
+import Message from '../Message';
 
 import { Container, Title, SubTitle } from './App.styled';
 
@@ -50,6 +51,20 @@ class App extends Component {
     );
   };
 
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsetContacts = JSON.parse(contacts);
+    if (parsetContacts) {
+      this.setState({ contacts: parsetContacts });
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (prevProps !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   render() {
     const filterContact = this.filterContact();
     return (
@@ -59,10 +74,14 @@ class App extends Component {
           <ContactForm onSubmitForm={this.formSubmitHendel} />
           <SubTitle>Contacts</SubTitle>
           <Filter onFilter={this.changeFilter} />
-          <ContactList
-            contacts={filterContact}
-            onDelete={this.deleteContacts}
-          />
+          {this.state.contacts.length === 0 ? (
+            <Message />
+          ) : (
+            <ContactList
+              contacts={filterContact}
+              onDelete={this.deleteContacts}
+            />
+          )}
         </Container>
       </>
     );
